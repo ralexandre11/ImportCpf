@@ -6,7 +6,7 @@ import org.springframework.batch.item.ItemProcessor;
 
 import com.ribeiro.ImportCpf.domain.Person;
 
-public class PersonItemProcessor implements ItemProcessor<Personn, Person>{
+public class PersonItemProcessor implements ItemProcessor<Person, Person>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(PersonItemProcessor.class);
 

@@ -20,7 +20,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
-import com.ribeiro.ImportCpf.batch.common.JobNotificationListener;
 import com.ribeiro.ImportCpf.domain.Person;
 
 @Configuration
@@ -61,13 +60,13 @@ public class PersonBatchConfiguration {
     public JdbcBatchItemWriter writer(DataSource dataSource) {
         return new JdbcBatchItemWriterBuilder()
           .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-          .sql("INSERT INTO person (id, name, cpf) VALUES (:id, :name, :cpf)")
+          .sql("INSERT INTO main.person (id, name, cpf) VALUES (:id, :name, :cpf)")
           .dataSource(dataSource)
           .build();
     }
     
     @Bean
-    public Job importUserJob(JobCompletionNotificationListener listener, Step step1) {
+    public Job importUserJob(JobListener listener, Step step1) {
         return jobBuilderFactory.get("importPersonJob")
           .incrementer(new RunIdIncrementer())
           .listener(listener)
@@ -87,7 +86,7 @@ public class PersonBatchConfiguration {
     }
 
     @Bean
-    public PsersonItemProcessor processor() {
+    public PersonItemProcessor processor() {
         return new PersonItemProcessor();
     }
     
