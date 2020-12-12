@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
-import com.ribeiro.importing.batch.common.JobNotificationListener;
+import com.ribeiro.ImportCpf.batch.common.JobNotificationListener;
 import com.ribeiro.ImportCpf.domain.Person;
 
 @Configuration
