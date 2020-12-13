@@ -21,7 +21,7 @@ public class JobListener extends JobExecutionListenerSupport {
   public void beforeJob(JobExecution jobExecution) {
 		super.beforeJob(jobExecution);
 		logger.info("Truncating table Person");
-		jdbcTemplate.update("truncate table main.person");
+		jdbcTemplate.update("truncate table person");
 		logger.info("Truncate successfully executed!");
   }
   
@@ -29,7 +29,7 @@ public class JobListener extends JobExecutionListenerSupport {
   public void afterJob(JobExecution jobExecution) {
     super.afterJob(jobExecution);
     if(jobExecution.getStatus() == BatchStatus.COMPLETED) {
-	    jdbcTemplate.queryForObject("SELECT setval('main.person_seq', coalesce(max(id_person), 0)+1 , false) FROM main.person;",Integer.class);
+	    jdbcTemplate.queryForObject("SELECT setval('person_seq', coalesce(max(id_person), 0)+1 , false) FROM person;",Integer.class);
 	    logger.info("Sequence ajusted!");
     }
   }
