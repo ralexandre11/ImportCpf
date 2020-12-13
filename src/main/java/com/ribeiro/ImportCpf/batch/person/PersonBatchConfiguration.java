@@ -2,6 +2,8 @@ package com.ribeiro.ImportCpf.batch.person;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -18,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.PathResource;
 
 import com.ribeiro.ImportCpf.domain.Person;
 
@@ -26,6 +28,8 @@ import com.ribeiro.ImportCpf.domain.Person;
 @EnableBatchProcessing
 public class PersonBatchConfiguration {
 
+	private static final Logger logger = LoggerFactory.getLogger(PersonBatchConfiguration.class);
+	
 	@Autowired
 	public JobBuilderFactory jobBuilderFactory;
 
@@ -40,12 +44,12 @@ public class PersonBatchConfiguration {
 	 * @return
 	 */
     @Bean
-    public FlatFileItemReader reader() {
-        return new FlatFileItemReaderBuilder().name("personalItemReader")
-          .resource(new ClassPathResource(fileInput))
+    public FlatFileItemReader<Person> reader() {
+        return new FlatFileItemReaderBuilder<Person>().name("personItemReader")
+          .resource(new PathResource(fileInput))
           .delimited()
           .names(new String[] { "id", "name", "cpf" })
-          .fieldSetMapper(new BeanWrapperFieldSetMapper() {{
+          .fieldSetMapper(new BeanWrapperFieldSetMapper<Person>() {{
               setTargetType(Person.class);
           }})
           .build();
@@ -56,38 +60,42 @@ public class PersonBatchConfiguration {
 	 * @param dataSource
 	 * @return
 	 */
-    @Bean
-    public JdbcBatchItemWriter writer(DataSource dataSource) {
-        return new JdbcBatchItemWriterBuilder()
-          .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-          .sql("INSERT INTO main.person (id, name, cpf) VALUES (:id, :name, :cpf)")
-          .dataSource(dataSource)
-          .build();
-    }
+    
+	@Bean
+	public JdbcBatchItemWriter<Person> writer(DataSource dataSource) {
+	    return new JdbcBatchItemWriterBuilder<Person>()
+	      .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+	      .sql("INSERT INTO main.person (id_person, name, cpf) VALUES (:id, :name, :cpf)")
+	      .dataSource(dataSource)
+	      .build();
+	}
     
     @Bean
-    public Job importUserJob(JobListener listener, Step step1) {
-        return jobBuilderFactory.get("importPersonJob")
-          .incrementer(new RunIdIncrementer())
-          .listener(listener)
-          .flow(step1)
-          .end()
-          .build();
-    }
+	public Job importPersonJob(JobListener listener, Step step1) {
+		logger.info("Importing from {}",fileInput);
+		Job job = jobBuilderFactory.get("importPersonJob")
+	      .incrementer(new RunIdIncrementer())
+	      .listener(listener)
+	      .flow(step1)
+	      .end()
+	      .build();
+	    return job;
+	}
 
-    @Bean
-    public Step step1(JdbcBatchItemWriter writer) {
-        return stepBuilderFactory.get("step1")
-          .<Person, Person>  chunk(10)
-          .reader(reader())
-          .processor(processor())
-          .writer(writer)
-          .build();
-    }
+	@Bean
+	public Step step1(JdbcBatchItemWriter<Person> writer) {
+		Step step = stepBuilderFactory.get("step1")
+	      .<Person, Person> chunk(10)
+	      .reader(reader())
+	      .processor(processor())
+	      .writer(writer)
+	      .build();
+	    return step;
+	}
 
-    @Bean
-    public PersonItemProcessor processor() {
-        return new PersonItemProcessor();
-    }
+	@Bean
+	public PersonItemProcessor processor() {
+	    return new PersonItemProcessor();
+	}
     
 }
