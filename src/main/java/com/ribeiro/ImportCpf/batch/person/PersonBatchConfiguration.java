@@ -65,7 +65,7 @@ public class PersonBatchConfiguration {
 	public JdbcBatchItemWriter<Person> writer(DataSource dataSource) {
 	    return new JdbcBatchItemWriterBuilder<Person>()
 	      .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-	      .sql("INSERT INTO main.person (id_person, name, cpf) VALUES (:id, :name, :cpf)")
+	      .sql("INSERT INTO person (id_person, name, cpf) VALUES (:id, :name, :cpf)")
 	      .dataSource(dataSource)
 	      .build();
 	}
