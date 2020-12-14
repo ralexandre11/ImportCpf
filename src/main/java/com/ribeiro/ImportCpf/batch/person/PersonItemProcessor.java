@@ -13,20 +13,21 @@ import com.ribeiro.ImportCpf.domain.Person;
 public class PersonItemProcessor implements ItemProcessor<Person, Person>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(PersonItemProcessor.class);
-	
-	 private final Function<Person, Boolean> validator;
 
-	 public PersonItemProcessor(final Function<Person, Boolean> validator)
-	 {
-		 this.validator = validator;
-	 }
-	
+  private final Function<Person, Boolean> validator;
+
+  public PersonItemProcessor(final Function<Person, Boolean> validator)
+  {
+    this.validator = validator;
+  }
+
 	/**
 	 * Responsible to make any necessary change in object data before be writed on database
 	 */
 	@Override
 	public Person process(final Person person) throws Exception {
-		if(!validator.apply(person)) {
+    if (!validator.apply(person))
+    {
 			return null;
 		}
 		final int id = person.getId();

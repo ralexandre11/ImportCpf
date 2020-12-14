@@ -4,17 +4,20 @@ spring:
   profiles:
     active: local
 
+  batch:
+    job:
+      enabled: false
+
   jpa:
     hibernate.ddl-auto: none
   datasource:
     initialization-mode: always
     platform: postgres
-
+    
 logging:
   level:
     ROOT: INFO
 
-#file.input=idNomCpf.txt
 ---
 spring:
   config:
@@ -23,6 +26,7 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/testdb
+    #url: ${DB_URL}
     username: postgres
     password: postgres
 
@@ -37,8 +41,6 @@ spring:
     username: postgres
     password: postgres
 
-file:
-  input: src/main/resources/idNomCpf.txt
 ---
 spring:
   config:
@@ -49,3 +51,4 @@ spring:
     url: jdbc:postgresql://localhost:5432/testdb
     username: postgres
     password: postgres
+
