@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.JdbcDatabaseContainer.NoDriverFoundException;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(args = "src/main/resources/idNomCpf.txt")
 @ActiveProfiles("test")
 public class ImportApplicationIntegrationTest
 {

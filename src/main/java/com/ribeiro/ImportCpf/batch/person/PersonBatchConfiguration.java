@@ -9,6 +9,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
@@ -27,40 +28,43 @@ import com.ribeiro.ImportCpf.domain.Person;
 @Configuration
 @EnableBatchProcessing
 public class PersonBatchConfiguration {
-
+	
 	private static final Logger logger = LoggerFactory.getLogger(PersonBatchConfiguration.class);
 	
-	@Autowired
+  @Autowired
 	public JobBuilderFactory jobBuilderFactory;
-
+	
 	@Autowired
 	public StepBuilderFactory stepBuilderFactory;
-	    
-    @Value("${file.input}")
-    private String fileInput;
-
+	
 	/**
 	 * Reader responsible to read the file and parse each line item into a Person object
 	 * @return
 	 */
-    @Bean
-    public FlatFileItemReader<Person> reader() {
-        return new FlatFileItemReaderBuilder<Person>().name("personItemReader")
-          .resource(new PathResource(fileInput))
-          .delimited()
-          .names(new String[] { "id", "name", "cpf" })
-          .fieldSetMapper(new BeanWrapperFieldSetMapper<Person>() {{
-              setTargetType(Person.class);
-          }})
-          .build();
-    }
-
+	@Bean
+  @StepScope
+  public FlatFileItemReader<Person> reader(
+      @Value("#{jobParameters['input.file.name']}") final String inputFileName)
+  {
+    logger.info("Importing from {}", inputFileName);
+    return new FlatFileItemReaderBuilder<Person>().name("personItemReader")
+        .resource(new PathResource(inputFileName))
+        .delimited()
+        .names(new String[] { "id", "name", "cpf" })
+        .fieldSetMapper(new BeanWrapperFieldSetMapper<Person>()
+        {
+          {
+            setTargetType(Person.class);
+          }
+        })
+        .build();
+	}
+	
 	/**
 	 * Writer responsible to insert Person object into database
 	 * @param dataSource
 	 * @return
 	 */
-    
 	@Bean
 	public JdbcBatchItemWriter<Person> writer(final DataSource dataSource) {
 	    return new JdbcBatchItemWriterBuilder<Person>()
@@ -69,10 +73,9 @@ public class PersonBatchConfiguration {
 	      .dataSource(dataSource)
 	      .build();
 	}
-
-    @Bean
-	public Job importPersonJob(final JobListener listener, final Step step1) {
-		logger.info("Importing from {}",fileInput);
+	
+	@Bean
+	public Job importPersonJob(final PersonJobListener listener, final Step step1) {
 		final Job job = jobBuilderFactory.get("importPersonJob")
 	      .incrementer(new RunIdIncrementer())
 	      .listener(listener)
@@ -81,16 +84,20 @@ public class PersonBatchConfiguration {
 	      .build();
 	    return job;
 	}
-
+	
 	@Bean
-	public Step step1(final JdbcBatchItemWriter<Person> writer, final PersonItemProcessor processor) {
+  public Step step1(
+      final FlatFileItemReader<Person> reader,
+      final PersonItemProcessor processor,
+      final JdbcBatchItemWriter<Person> writer)
+  {
 		final Step step = stepBuilderFactory.get("step1")
 	      .<Person, Person> chunk(10)
-	      .reader(reader())
-	      .processor(processor)
+        .reader(reader)
+        .processor(processor)
 	      .writer(writer)
 	      .build();
 	    return step;
 	}
-  
+
 }

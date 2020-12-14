@@ -10,9 +10,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JobListener extends JobExecutionListenerSupport {
+public class PersonJobListener extends JobExecutionListenerSupport {
 
-  private static final Logger logger = LoggerFactory.getLogger(JobListener.class);
+  private static final Logger logger = LoggerFactory.getLogger(PersonJobListener.class);
 
   @Autowired
   private JdbcTemplate jdbcTemplate;
