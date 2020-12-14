@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: Import CPFs
+  profiles:
+    active: local
+
+  jpa:
+    hibernate.ddl-auto: none
+  datasource:
+    initialization-mode: always
+    platform: postgres
+
+logging:
+  level:
+    ROOT: INFO
+
+#file.input=idNomCpf.txt
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/testdb
+    username: postgres
+    password: postgres
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    url: ${DB_URL}
+    username: postgres
+    password: postgres
+
+file:
+  input: src/main/resources/idNomCpf.txt
+---
+spring:
+  config:
+    activate:
+      on-profile: aws
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/testdb
+    username: postgres
+    password: postgres
