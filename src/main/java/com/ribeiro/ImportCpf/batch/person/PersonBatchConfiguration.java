@@ -91,13 +91,13 @@ public class PersonBatchConfiguration {
       final PersonItemProcessor processor,
       final JdbcBatchItemWriter<Person> writer)
   {
-		final Step step = stepBuilderFactory.get("step1")
-	      .<Person, Person> chunk(10)
-        .reader(reader)
-        .processor(processor)
-	      .writer(writer)
-	      .build();
-	    return step;
-	}
+	final Step step = stepBuilderFactory.get("step1")
+	  .<Person, Person> chunk(10)
+	  .reader(reader)
+	  .processor(processor)
+	  .writer(writer)
+	  .build();
+	return step;
+  }
 
 }

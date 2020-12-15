@@ -13,6 +13,10 @@ import com.ribeiro.ImportCpf.domain.Person;
 public class PersonItemProcessor implements ItemProcessor<Person, Person>{
 	
   private static final Logger logger = LoggerFactory.getLogger(PersonItemProcessor.class);
+  
+  private int countValid;
+  
+  private int countInvalid;
 
   private final Function<Person, Boolean> validator;
 
@@ -28,6 +32,7 @@ public class PersonItemProcessor implements ItemProcessor<Person, Person>{
   public Person process(final Person person) throws Exception {
     if (!validator.apply(person))
     {
+      countInvalid ++;
       return null;
     }
     final int id = person.getId();
@@ -35,9 +40,18 @@ public class PersonItemProcessor implements ItemProcessor<Person, Person>{
     final String cpf = person.getCpf();
     
     final Person transformed = new Person(id,name,cpf);
-    logger.info("Converting ( {} ) into ( {} )",person,transformed);	
+    logger.info("Converting ( {} ) into ( {} )",person,transformed);
     
+    countValid ++;
     return transformed;
-	}
+  }
 
+  public int getCountValid() {
+    return countValid;
+  }
+
+  public int getCountInvalid() {
+    return countInvalid;
+  }
+  
 }

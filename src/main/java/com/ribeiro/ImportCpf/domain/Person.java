@@ -1,15 +1,19 @@
 package com.ribeiro.ImportCpf.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Builder
+@ToString
 public class Person {
 	
 	private @NonNull Integer id;
@@ -18,21 +22,4 @@ public class Person {
 	
 	private @NonNull String cpf;
 
-	
-//	public Person() {
-//		super();
-//	}
-//
-//	public Person(int id, String name, String cpf) {
-//		super();
-//		this.id = id;
-//		this.name = name;
-//		this.cpf = cpf;
-//	}
-//
-//	@Override
-//	public String toString() {
-//		return "Person [id=" + id + ", name=" + name + ", cpf=" + cpf + "]";
-//	}
-	
 }

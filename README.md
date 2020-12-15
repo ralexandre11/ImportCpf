@@ -78,9 +78,9 @@ Let's focus on Linux instalation, after all, Windows is just next, next, next...
 ## Usage
 
 To run just type the command below at your terminal:
-```java --jar <JAR_FILE> --file.input=<TEXT_FILE>```
+```java -jar <JAR_FILE> <TEXT_FILE>```
 
-Ex:```java --jar importing-0.0.1-SNAPSHOT.jar --file.input=person.txt```
+Ex:```java -jar target/ImportCpf-0.0.1-SNAPSHOT.jar person.txt```
 
 #### dockerhub
 https://hub.docker.com/repository/docker/projetquebec/projetquebec

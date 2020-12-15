@@ -27,6 +27,7 @@ public class ImportRunner implements ApplicationRunner
   {
     final JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
     jobParametersBuilder.addString("input.file.name", args.getSourceArgs()[0]);
+    jobParametersBuilder.addLong("time", System.currentTimeMillis());
     final JobParameters jobParameters = jobParametersBuilder.toJobParameters();
 
     final JobExecution execution = jobLauncher.run(job, jobParameters);

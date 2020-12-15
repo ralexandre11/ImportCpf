@@ -2,6 +2,9 @@ package com.ribeiro.ImportCpf;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class PersonPostgresqlContainer extends PostgreSQLContainer<PersonPostgresqlContainer>
 {
   private static final String IMAGE_VERSION = "postgres:11.1";
@@ -29,6 +32,7 @@ public class PersonPostgresqlContainer extends PostgreSQLContainer<PersonPostgre
   {
     super.start();
     System.setProperty("DB_URL", container.getJdbcUrl());
+    log.info(System.getProperty("DB_URL"));
   }
 
   @Override
