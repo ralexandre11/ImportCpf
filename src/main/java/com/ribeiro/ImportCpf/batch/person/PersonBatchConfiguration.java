@@ -29,63 +29,63 @@ import com.ribeiro.ImportCpf.domain.Person;
 @EnableBatchProcessing
 public class PersonBatchConfiguration {
 	
-	private static final Logger logger = LoggerFactory.getLogger(PersonBatchConfiguration.class);
-	
+  private static final Logger logger = LoggerFactory.getLogger(PersonBatchConfiguration.class);
+
   @Autowired
-	public JobBuilderFactory jobBuilderFactory;
+  public JobBuilderFactory jobBuilderFactory;
+
+  @Autowired
+  public StepBuilderFactory stepBuilderFactory;
 	
-	@Autowired
-	public StepBuilderFactory stepBuilderFactory;
-	
-	/**
-	 * Reader responsible to read the file and parse each line item into a Person object
-	 * @return
-	 */
-	@Bean
+  /**
+  ** Reader responsible to read the file and parse each line item into a Person object
+  ** @return
+  **/
+  @Bean
   @StepScope
   public FlatFileItemReader<Person> reader(
-      @Value("#{jobParameters['input.file.name']}") final String inputFileName)
+  @Value("#{jobParameters['input.file.name']}") final String inputFileName)
   {
     logger.info("Importing from {}", inputFileName);
     return new FlatFileItemReaderBuilder<Person>().name("personItemReader")
-        .resource(new PathResource(inputFileName))
-        .delimited()
-        .names(new String[] { "id", "name", "cpf" })
-        .fieldSetMapper(new BeanWrapperFieldSetMapper<Person>()
+      .resource(new PathResource(inputFileName))
+      .delimited()
+      .names(new String[] { "id", "name", "cpf" })
+      .fieldSetMapper(new BeanWrapperFieldSetMapper<Person>()
+      {
         {
-          {
-            setTargetType(Person.class);
-          }
-        })
-        .build();
+          setTargetType(Person.class);
+        }
+      })
+      .build();
 	}
 	
-	/**
-	 * Writer responsible to insert Person object into database
-	 * @param dataSource
-	 * @return
-	 */
-	@Bean
-	public JdbcBatchItemWriter<Person> writer(final DataSource dataSource) {
-	    return new JdbcBatchItemWriterBuilder<Person>()
-	      .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-	      .sql("INSERT INTO person (id_person, name, cpf) VALUES (:id, :name, :cpf)")
-	      .dataSource(dataSource)
-	      .build();
-	}
+  /**
+  ** Writer responsible to insert Person object into database
+  ** @param dataSource
+  ** @return
+  **/
+  @Bean
+  public JdbcBatchItemWriter<Person> writer(final DataSource dataSource) {
+    return new JdbcBatchItemWriterBuilder<Person>()
+      .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+      .sql("INSERT INTO person (id_person, name, cpf) VALUES (:id, :name, :cpf)")
+      .dataSource(dataSource)
+      .build();
+  }
 	
-	@Bean
-	public Job importPersonJob(final PersonJobListener listener, final Step step1) {
-		final Job job = jobBuilderFactory.get("importPersonJob")
-	      .incrementer(new RunIdIncrementer())
-	      .listener(listener)
-	      .flow(step1)
-	      .end()
-	      .build();
-	    return job;
-	}
+  @Bean
+  public Job importPersonJob(final PersonJobListener listener, final Step step1) {
+    final Job job = jobBuilderFactory.get("importPersonJob")
+      .incrementer(new RunIdIncrementer())
+      .listener(listener)
+      .flow(step1)
+      .end()
+      .build();
+	return job;
+  }
 	
-	@Bean
+  @Bean
   public Step step1(
       final FlatFileItemReader<Person> reader,
       final PersonItemProcessor processor,
