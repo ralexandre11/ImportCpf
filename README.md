@@ -82,8 +82,12 @@ To run just type the command below at your terminal:
 
 Ex:`java -jar target/ImportCpf-0.0.1-SNAPSHOT.jar person.txt`
 
+### Run with docker
+docker run -v /tmp/list-cpf.txt:/cpfs.txt -v /var/run/docker.sock:/var/run/docker.sock projetquebec/projetquebec:0.0.1-SNAPSHOT cpfs.txt
+
 
 #### dockerhub
 https://hub.docker.com/repository/docker/projetquebec/projetquebec
+
 
 Created by Ricardo Ribeiro
