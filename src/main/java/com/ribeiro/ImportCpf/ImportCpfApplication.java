@@ -15,7 +15,7 @@ public class ImportCpfApplication
 
   public static void main(final String[] args)
   {
-    PersonPostgresqlContainer.getInstance();
+//    PersonPostgresqlContainer.getInstance();
 
     checkParameters(args);
 
@@ -34,7 +34,7 @@ public class ImportCpfApplication
     {
       System.err.println("Error! File not found");
       System.err.println("");
-      System.err.println("Syntax: java -jar importing-0.0.1-SNAPSHOT.jar <file name>");
+      System.err.println("Syntax: java -jar target/ImportCpf-0.0.1-SNAPSHOT.jar <file name>");
       System.exit(1);
     }
   }

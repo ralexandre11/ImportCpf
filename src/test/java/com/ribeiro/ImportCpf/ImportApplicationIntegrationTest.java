@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.JdbcDatabaseContainer.NoDriverFoundException;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(args = "src/main/resources/idNomCpf.txt")
+@SpringBootTest(args = "src/main/resources/list-cpf.txt")
 @ActiveProfiles("test")
 public class ImportApplicationIntegrationTest
 {
@@ -27,7 +27,7 @@ public class ImportApplicationIntegrationTest
   @Test
   void testImport() throws NoDriverFoundException, SQLException
   {
-    assertEquals(30, countPerson());
+    assertEquals(6, countPerson());
   }
 
   private Long countPerson() throws NoDriverFoundException, SQLException
