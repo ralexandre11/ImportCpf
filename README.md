@@ -54,7 +54,7 @@ The text file to import must have three fields separated by comma as follow:
 
 `docker run -v <FileFullPathName>:/cpfs.txt -v /var/run/docker.sock:/var/run/docker.sock projetquebec/projetquebec:0.0.1-SNAPSHOT cpfs.txt`
 
-Attention! You must pass the file with the "full pathname" in the first parameter "-v". (If necessary, use sudo in Linux). You have to change only the parameter <FileFullPathName>. The rest of the command does not change.
+Attention! You must pass the file with the "full pathname" in the first parameter "-v". (If necessary, use sudo in Linux). You have to change only the first parameter <FileFullPathName>. The rest of the command does not change.
 
 Example:
 
@@ -99,6 +99,10 @@ Example:
 * use the docker command to run in the topic above.
 
 * To run just type the command below at your terminal:
+
+## known Issues
+* The application imports only one file at each run
+* Duplicate Name and CPF records can be imported
 
 ## dockerhub
 https://hub.docker.com/repository/docker/projetquebec/projetquebec
