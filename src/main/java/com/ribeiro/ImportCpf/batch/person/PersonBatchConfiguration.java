@@ -43,7 +43,7 @@ public class PersonBatchConfiguration {
   **/
   @Bean
   @StepScope
-  public FlatFileItemReader<Person> reader(
+  public FlatFileItemReader<Person> personReader(
   @Value("#{jobParameters['input.file.name']}") final String inputFileName)
   {
     logger.info("Importing from {}", inputFileName);
@@ -66,7 +66,8 @@ public class PersonBatchConfiguration {
   ** @return
   **/
   @Bean
-  public JdbcBatchItemWriter<Person> writer(final DataSource dataSource) {
+  public JdbcBatchItemWriter<Person> personWriter(final DataSource dataSource)
+  {
     return new JdbcBatchItemWriterBuilder<Person>()
       .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
       .sql("INSERT INTO person (id_person, name, cpf) VALUES (:id, :name, :cpf)")
@@ -86,7 +87,7 @@ public class PersonBatchConfiguration {
   }
 	
   @Bean
-  public Step step1(
+  public Step importPersonStep(
       final FlatFileItemReader<Person> reader,
       final PersonItemProcessor processor,
       final JdbcBatchItemWriter<Person> writer)
@@ -96,6 +97,9 @@ public class PersonBatchConfiguration {
 	  .reader(reader)
 	  .processor(processor)
 	  .writer(writer)
+    .faultTolerant()
+    .skip(Exception.class)
+    .skipLimit(Integer.MAX_VALUE)
 	  .build();
 	return step;
   }
