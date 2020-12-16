@@ -62,12 +62,22 @@ Example:
 
 ## Results
 
-* At the end of the batch file process, a query is made in the database table to verify the result:
+* At the end of the batch file process, is shown the result:
+<p>
+  <img src="src/main/resources/imgs/Result6.png" alt="Result 6">
+</p>
+
+* The result the Step process is listed in the application log as follows:
+<p>
+  <img src="src/main/resources/imgs/Result5.png" alt="Result 5">
+</p>
+
+* Also a query is made in the database table to verify the result:
 <p>
   <img src="src/main/resources/imgs/Result4.png" alt="Result Sql">
 </p>
 
-* The final result of the process is listed in the application log as follows:
+* The result query is listed in the application log as follows:
 <p>
   <img src="src/main/resources/imgs/Result3.png" alt="Result Total">
 </p>

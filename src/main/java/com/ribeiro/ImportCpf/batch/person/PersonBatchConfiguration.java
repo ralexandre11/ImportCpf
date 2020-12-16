@@ -114,11 +114,10 @@ public class PersonBatchConfiguration {
             @Override
             public ExitStatus afterStep(final StepExecution stepExecution)
             {
-              // System.out.println(stepExecution.toString());
         	  logger.info("---------------");
           	  logger.info("Step: Total CPF Read: {}", stepExecution.getReadCount());
           	  logger.info("Step: Total CPF Valid: {}", stepExecution.getWriteCount());
-          	  logger.info("Step: Skip invalid: {}", stepExecution.getReadSkipCount());          	  
+          	  logger.info("Step: Skip invalid: {}", stepExecution.getReadSkipCount());
         	  logger.info("---------------");
               return stepExecution.getExitStatus();
             }
