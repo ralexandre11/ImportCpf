@@ -27,7 +27,7 @@ public class ImportApplicationIntegrationTest
   @Test
   void testImport() throws NoDriverFoundException, SQLException
   {
-    assertEquals(6, countPerson());
+    assertEquals(3, countPerson());
   }
 
   private Long countPerson() throws NoDriverFoundException, SQLException
