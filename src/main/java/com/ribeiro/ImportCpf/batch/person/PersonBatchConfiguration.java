@@ -4,8 +4,11 @@ import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -97,10 +100,30 @@ public class PersonBatchConfiguration {
 	  .reader(reader)
 	  .processor(processor)
 	  .writer(writer)
-    .faultTolerant()
-    .skip(Exception.class)
-    .skipLimit(Integer.MAX_VALUE)
-	  .build();
+      .faultTolerant()
+      .skip(Exception.class)
+      .skipLimit(Integer.MAX_VALUE)
+      .listener(new StepExecutionListener()
+          {
+            @Override
+            public void beforeStep(final StepExecution stepExecution)
+            {
+              // TODO Auto-generated method stub
+            }
+
+            @Override
+            public ExitStatus afterStep(final StepExecution stepExecution)
+            {
+              // System.out.println(stepExecution.toString());
+        	  logger.info("---------------");
+          	  logger.info("Step: Total CPF Read: {}", stepExecution.getReadCount());
+          	  logger.info("Step: Total CPF Valid: {}", stepExecution.getWriteCount());
+          	  logger.info("Step: Skip invalid: {}", stepExecution.getReadSkipCount());          	  
+        	  logger.info("---------------");
+              return stepExecution.getExitStatus();
+            }
+          })
+  	  .build();
 	return step;
   }
 

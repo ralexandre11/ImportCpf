@@ -19,9 +19,6 @@ public class PersonJobListener extends JobExecutionListenerSupport {
   @Autowired
   private JdbcTemplate jdbcTemplate;
   
-  @Autowired
-  private PersonItemProcessor processor;
-  
   @Override
   public void beforeJob(JobExecution jobExecution) {
     super.beforeJob(jobExecution);
@@ -35,12 +32,9 @@ public class PersonJobListener extends JobExecutionListenerSupport {
     super.afterJob(jobExecution);
     if(jobExecution.getStatus() == BatchStatus.COMPLETED) {
 	  jdbcTemplate.queryForObject("SELECT setval('person_seq', coalesce(max(id_person), 0)+1 , false) FROM person;",Integer.class);
+	  logger.info("Sequence ajusted in database!");
 	  logger.info("---------------");
-	  logger.info("Sequence ajusted!");
-	  logger.info("Total Valid: "+processor.getCountValid());
-	  logger.info("Total Invalid: "+processor.getCountInvalid());
-	  logger.info("---------------");
-	  logger.info("Query Select Database:");
+	  logger.info("Query database: SELECT id_person, name, cpf FROM person");
 	  jdbcTemplate.query("SELECT id_person, name, cpf FROM person",
         (rs, row) -> Person.builder().id(rs.getInt(1)).name(rs.getString(2)).cpf(rs.getString(3)))
         .forEach(person -> logger.info(person.toString()));
