@@ -15,7 +15,7 @@ public class ImportCpfApplication
 
   public static void main(final String[] args)
   {
-//    PersonPostgresqlContainer.getInstance();
+    PersonPostgresqlContainer.getInstance();
 
     checkParameters(args);
 

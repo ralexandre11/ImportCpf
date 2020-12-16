@@ -1,77 +1,78 @@
-<!-- PROJECT LOGO -->
-<br />
 <p align="center">
-  <a href="https://spring.io/projects/spring-boot">
-    <img src="https://spring.io/images/spring-logo-9146a4d3298760c2e7e49595184e1975.svg" alt="Logo" width="200" height="200">
+  <a href="https://docs.spring.io/spring-batch/docs/current/reference/html/index.html">
+    <img src="logo.png" alt="Logo" width="250"  height="250">
   </a>
-
-  <h3 align="center">Spring Batch</h3>
-
-  <p align="center">
-    Application to demonstrate Spring Batch
 </p>
 
+# Spring Batch Application
+
+Developed by [![Linkedin: ricardoalexandreribeiro](https://img.shields.io/badge/-Ricardo%20Ribeiro-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/ricardoalexandreribeiro/)](https://www.linkedin.com/in/ricardoalexandreribeiro/)
+
+If you want, read the reference documentation about [Spring Batch](https://docs.spring.io/spring-batch/docs/current/reference/html/index.html)
+
+## About the application
+
+This repository contains an example application using the Spring batch framework. 
+The purpose of the application is:
+* Read a TXT file that contains three fields separated by commas in each line
+* Do the necessary validation of the information
+* Import the data into the Postgres database.
+* For test purpose, Postgres run embedded inside the docker container. So, no data is persisted across executions.
+
+### Developed With
+
+* **Spring Boot / Spring Batch** Framework to processing TXT file and import to database.
+* Database **PostgreSQL** to store the data.
+* **Docker** to package and run applications inside a container.
+* **Flyway** Database Migration Tool to create the necessary tables in the database.
+* **Maven** as Dependency Management System, and **Lombok Java library** to improve productivity.
+* **Eclipse** as IDE.
+
+## File TXT format
+
+The text file to import must have three fields separated by comma as follow:
+  * ID: sequential number that will be the primary key in the database.
+  * NAME: string.
+  * CPF: 11 character number.
+
+## How to run
+
+* You will need a Windows or Linux with Java/OpenJDK.
+* Application is using Maven, so all required libraries should be downloaded automatically.
+* If you don't have Docker, please [install Docker](https://docs.aws.amazon.com/AmazonECS/latest/userguide/docker-basics.html)
+* Run application using Docker
+
+`sudo docker run -v /home/ec2-user/importcpf/list-cpf.txt:/cpfs.txt -v /var/run/docker.sock:/var/run/docker.sock projetquebec/projetquebec:0.0.1-SNAPSHOT cpfs.txt`
+
+* Run application using Docker in AWS
+
+`sudo docker run -v /home/ec2-user/importcpf/list-cpf.txt:/cpfs.txt -v /var/run/docker.sock:/var/run/docker.sock projetquebec/projetquebec:0.0.1-SNAPSHOT cpfs.txt`
 
 
-<!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-  </ol>
-</details>
+## How to develop
+
+* Clone the git repository using the URL on the Github home page:
+
+
+`$ git clone git@github.com:ralexandre11/ImportCpf.git`
+
+`$ cd ImportCpf`
+
+* Buid the image Docker
+
+`$ mvn package`
 
 
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
 
-The main goal is show how to import data from a comma delimited file to a Postgres Database.
+* To run just type the command below at your terminal:
 
-### Built With
+`$ java -jar <JAR_FILE> <TEXT_FILE>`
 
-* [Spring Boot](https://spring.io/projects/spring-boot)
-* [Flyway](https://flywaydb.org/)
-* [PostgreSQL](https://www.postgresql.org/)
+Run with a project test file:
 
+`java -jar target/ImportCpf-0.0.1-SNAPSHOT.jar src/main/resources/list-cpf.txt`
 
-
-<!-- GETTING STARTED -->
-## Getting Started
-
-Let's see how to start use
-
-### Prerequisites
-
-You will need a Windows or Linux with Java/OpenJDK environment and a PostgreSQL server running.
-
-The text file person to import must be tree fields separated with comma as follow:
-<ID>,<NAME>,<CPF>
-
-### Installation
-
-Let's focus on Linux instalation, after all, Windows is just next, next, next... ;-)
-
-1. Install OpenJDK 8 or newer
-   ```aptget install ....
-   ```
-2. Install PostgreSQL
-   ```aptget install ....
-   ```
-3. Create a diretory and copy JAR_FILE and the file with persons to import 
    
 
 <!-- USAGE EXAMPLES -->
@@ -84,10 +85,7 @@ To run just type the command below at your terminal:
 Ex:`java -jar target/ImportCpf-0.0.1-SNAPSHOT.jar person.txt`
 
 ### Run with docker
-docker run -v /tmp/list-cpf.txt:/cpfs.txt -v /var/run/docker.sock:/var/run/docker.sock projetquebec/projetquebec:0.0.1-SNAPSHOT cpfs.txt
 
 #### dockerhub
 https://hub.docker.com/repository/docker/projetquebec/projetquebec
 
-
-Created by Ricardo Ribeiro
