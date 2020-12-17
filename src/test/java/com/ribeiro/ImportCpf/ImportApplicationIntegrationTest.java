@@ -27,7 +27,8 @@ public class ImportApplicationIntegrationTest
   @Test
   void testImport() throws NoDriverFoundException, SQLException
   {
-    assertEquals(3, countPerson());
+	// With list-cpf.txt => 10 rows, 6 valid CPF
+    assertEquals(6, countPerson());
   }
 
   private Long countPerson() throws NoDriverFoundException, SQLException

@@ -50,15 +50,15 @@ The text file to import must have three fields separated by comma as follow:
 * Create new TXT file or copy a file that already exists.
 * Run on the terminal:
 
-`sudo docker pull projetquebec/projetquebec:0.0.1-SNAPSHOT`
+		`sudo docker pull projetquebec/projetquebec:0.0.1-SNAPSHOT`
 
-`docker run -v <FileFullPathName>:/cpfs.txt -v /var/run/docker.sock:/var/run/docker.sock projetquebec/projetquebec:0.0.1-SNAPSHOT cpfs.txt`
+		`docker run -v <FileFullPathName>:/cpfs.txt -v /var/run/docker.sock:/var/run/docker.sock projetquebec/projetquebec:0.0.1-SNAPSHOT cpfs.txt`
 
 Attention! You must pass the file with the "full pathname" in the first parameter "-v". (If necessary, use sudo in Linux). You have to change only the first parameter <FileFullPathName>. The rest of the command does not change.
 
 Example:
 
-`docker run -v /home/usuario/importCpf/list-cpf.txt:/cpfs.txt -v /var/run/docker.sock:/var/run/docker.sock projetquebec/projetquebec:0.0.1-SNAPSHOT cpfs.txt`
+		`docker run -v /home/usuario/importCpf/list-cpf.txt:/cpfs.txt -v /var/run/docker.sock:/var/run/docker.sock projetquebec/projetquebec:0.0.1-SNAPSHOT cpfs.txt`
 
 ## Results
 
@@ -88,17 +88,24 @@ Example:
 * Application is using Maven, so all required libraries should be downloaded automatically.
 * Clone the git repository using the URL on the Github home page:
 
-`$ git clone git@github.com:ralexandre11/ImportCpf.git`
+		`$ git clone git@github.com:ralexandre11/ImportCpf.git`
 
-`$ cd ImportCpf`
+		`$ cd ImportCpf`
 
 * To buid the image Docker, use the command:
 
-`$ mvn package`
+		`$ mvn package`
 
 * use the docker command to run in the topic above.
 
-* To run just type the command below at your terminal:
+* To run the JAR File, just type the command below at your terminal:
+
+		`java -jar <JAR_FILE> <TEXT_FILE>`
+
+Example:
+
+		`java -jar target/ImportCpf-0.0.1-SNAPSHOT.jar list-cpf.txt`
+	
 
 ## known Issues
 * The application imports only one file at each run
