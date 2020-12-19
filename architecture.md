@@ -25,8 +25,6 @@ Faz parte do projeto **Spring**, utilizado para criar aplicações **batch**. Fa
 
 - A solução é composta dos seguintes componentes:
 
-**@EnableBatchProcessing**: Essa anotação permite que o Spring monte toda a estrutura necessária para executar o batch. Utilizado na classe **PersonBatchConfiguration**
-
 **Job Launcher**: executa o job de fato. É executado no ImportRunner(ApplicationRunner), sendo passado como parâmetro "jobParameters" que é informado o arquivo que será importado.
 
 	`jobLauncher.run(job, jobParameters)`
@@ -47,9 +45,9 @@ Faz parte do projeto **Spring**, utilizado para criar aplicações **batch**. Fa
 
 **ItemReader**: Parte do step onde é feita a leitura da fonte origem, no nosso projeto foi um aquivo txt, foi implementado **personReader** no **PersonBatchConfiguration**.
 
-**ItemWriterr**: Parte do step onde é feita a excrita no destino, no nosso projeto foi utilizado um banco de dados. Foi implementado **personWriter** no **PersonBatchConfiguration**.
+**ItemWriter**: Parte do step onde é feita a excrita no destino, no nosso projeto foi utilizado um banco de dados Postgres. Foi implementado **personWriter** no **PersonBatchConfiguration**.
 
-**ItemProcessor**: Parte do step onde é feita o processamento e validação dos dados, no nosso projeto foi verificado o CPF se é par. Foi implementado no componente **PersonItemProcessor**.
+**ItemProcessor**: Parte do step onde é feita o processamento e validação dos dados, no caso deste projeto foi inserificado cada linha do arquivo txt e inserido no Banco de Dados apenas as que tinham o numéro do *CPF par*. Foi implementado no componente **PersonItemProcessor**.
 
 **Job Repository**: mantém o estado da execução do job (escritas, leituras, duração, status, erros, etc), que é compartilhado com os outros componentes da solução.
 
@@ -60,12 +58,21 @@ Faz parte do projeto **Spring**, utilizado para criar aplicações **batch**. Fa
 
 **@Component**: indica que a classe vai ser gerenciada pelo container do Spring.
 
-**@Configuration**: indica que a classe possui métodos que expõe novos beans. (Derivada da @Component)
+**@Configuration**: indica que a classe contém uma fonte de definições de novos beans. (Derivada da @Component)
 
 **@Bean**: utilizada com métodos de uma classe, indicando que o Spring deve invocar aquele método e gerenciar o objeto retornado por ele. Sendo assim, este objeto pode ser injetado em qualquer ponto da sua aplicação.
 
-**@Autowired**: utilizada para marcar o ponto de injeção na sua classe. Pode ser usado ela sobre atributos ou sobre o seu construtor com argumentos.
+**@Autowired**: instrui a injeção de dependência do Spring a conectar um bean especifico ao membro da classe. (Pode ser usado ela sobre atributos ou sobre o seu construtor com argumentos)
 
+**@EnableBatchProcessing**: Essa anotação permite que o Spring monte toda a estrutura necessária para executar o batch. Foi utilizado neste projeto no componente **PersonBatchConfiguration**
+
+**@@StepScope**: o Spring Batch usará o container spring para instanciar uma nova instância desse componente para cada execução do Step. Para ter acesso ao **jobParameters** é necessário que o escopo do bean seja de Step. Isso porque o objeto só estará disponível no escopo de execução do step.
+
+**@Value**: mostra ao spring que o valor a ser injetado desse atributo deve ser o passado como parâmetro. Neste projeto foi usado para passar o arquivo TXT como parâmetro no Reader.
+
+**@Getter, @Setter, @NoArgsConstructor, @RequiredArgsConstructor, @Builder, @ToString**: Anotações do framework **Lombok**, deixando o código menos verboso, gerando em tempo de compilação os métodos getters, setters, consturutores, etc. 
+
+**@Slf4j**: cria, por default, uma váriável **log** para ser usado no código e mostrar informações no log.
 
 - Algumas Outras anotações importantes, mas que não foram utilizadas no projeto
 

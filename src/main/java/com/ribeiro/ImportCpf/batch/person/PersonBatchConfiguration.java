@@ -43,7 +43,8 @@ public class PersonBatchConfiguration {
   /**
   ** Reader responsible to read the file and parse each line item into a Person object
   ** @return
-  **/
+  **/ 
+
   @Bean
   @StepScope
   public FlatFileItemReader<Person> personReader(
